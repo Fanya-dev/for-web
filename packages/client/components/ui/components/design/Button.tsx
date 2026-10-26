@@ -142,6 +142,7 @@ export function Button(props: Props) {
         _permitAnimation,
       })}
       style={{
+        ...(typeof rest.style === "object" && rest.style ? (rest.style as any) : {}),
         "background-color": style.bg,
       }}
       // @codegen directives props=rest include=floating

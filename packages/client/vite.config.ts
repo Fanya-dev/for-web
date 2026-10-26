@@ -31,6 +31,21 @@ export default defineConfig({
     linguiSolidPlugin(),
     solidSvg({
       defaultAsComponent: false,
+      svgo: {
+        enabled: true,
+        svgoConfig: {
+          plugins: [
+            {
+              name: "preset-default",
+              params: {
+                overrides: {
+                  removeViewBox: false,
+                },
+              },
+            },
+          ],
+        },
+      },
     }),
     addFontPreload(),
     legacy({

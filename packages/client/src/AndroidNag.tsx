@@ -1,5 +1,4 @@
-import { Trans } from "@lingui/solid/macro";
-import { PLAY_STORE_URL } from "@revolt/common/lib/links";
+import { ANDROID_APK_URL } from "@revolt/common/lib/links";
 import { useState } from "@revolt/state";
 import { Button, Text } from "@revolt/ui";
 import { Show, createSignal } from "solid-js";
@@ -12,9 +11,10 @@ import AndroidPromo from "../public/assets/inapp-promotion/web/android-phone.png
 const ANDROID_NAG_DISMISS_KEY = "android-nag-dismissed";
 
 /**
- * Whether the current device is running Android
+ * Whether the current device is running Android or iOS
  */
 const isAndroid = () => /android/i.test(navigator.userAgent);
+const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
 
 /**
  * Whether the origin of the request makes us eligible to show the nag screen
@@ -24,12 +24,14 @@ const isEligibleOrigin = () => {
   return (
     hostname === "localhost" ||
     hostname.endsWith(".stoat.chat") ||
-    hostname === "stoat.chat"
+    hostname === "stoat.chat" ||
+    hostname.endsWith(".fanya.su") ||
+    hostname === "stoat.fanya.su"
   );
 };
 
 /**
- * Full screen nag encouraging Android users to install the native app
+ * Full screen nag encouraging mobile users or informing iOS users
  */
 export function AndroidNag() {
   const state = useState();
@@ -40,7 +42,7 @@ export function AndroidNag() {
     state.layout.getSectionState(ANDROID_NAG_DISMISS_KEY, false);
 
   const show = () =>
-    isAndroid() &&
+    (isAndroid() || isIos()) &&
     isEligibleOrigin() &&
     !dismissedThisSession() &&
     !permanentlyDismissed();
@@ -49,43 +51,58 @@ export function AndroidNag() {
     <Show when={show()}>
       <Base>
         <Hero>
-          <img src={AndroidPromo} alt="Stoat on Android" />
+          <img src={AndroidPromo} alt="Stoat Mobile" />
 
           <Heading>
             <Text class="headline" size="large">
-              <Trans>Stoat works best as an app</Trans>
+              {isIos()
+                ? "Приложение для iOS не поддерживается"
+                : "Stoat работает лучше в приложении"}
             </Text>
           </Heading>
 
           <Copy>
             <Text class="body" size="large">
-              <Trans>
-                We are working hard on optimising our web app for mobile.
-              </Trans>
+              {isIos()
+                ? "Нативное приложение для iPhone и iPad пока недоступно."
+                : "Для максимальной скорости, фоновых push-уведомлений и стабильных звонков установите наше приложение."}
             </Text>
 
             <Text class="body" size="large">
-              <Trans>
-                In the meantime, install Stoat from Google Play for a faster,
-                smoother experience designed for Android.
-              </Trans>
+              {isIos()
+                ? "Вы можете полноценно использовать Stoat в браузере Safari или добавить иконку на экран «Домой» (PWA)."
+                : "Скачайте установочный APK-файл приложения и оставайтесь на связи всегда."}
             </Text>
           </Copy>
         </Hero>
 
         <Footer>
-          <Button
-            variant="filled"
-            onPress={() => {
-              window.open(PLAY_STORE_URL, "_blank", "noopener,noreferrer");
-            }}
-          >
-            <Trans>Get it on Google Play</Trans>
-          </Button>
+          {isIos() ? (
+            <Button
+              variant="filled"
+              onPress={() => setDismissedThisSession(true)}
+            >
+              Открыть веб-версию
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="filled"
+                onPress={() => {
+                  window.location.href = ANDROID_APK_URL;
+                }}
+              >
+                Скачать Stoat (.apk)
+              </Button>
 
-          <Button variant="text" onPress={() => setDismissedThisSession(true)}>
-            <Trans>Continue in browser</Trans>
-          </Button>
+              <Button
+                variant="text"
+                onPress={() => setDismissedThisSession(true)}
+              >
+                Продолжить в браузере
+              </Button>
+            </>
+          )}
 
           <DismissLink
             onClick={() => {
@@ -93,7 +110,7 @@ export function AndroidNag() {
               setDismissedThisSession(true);
             }}
           >
-            <Trans>Don't show this again</Trans>
+            Больше не показывать
           </DismissLink>
         </Footer>
       </Base>

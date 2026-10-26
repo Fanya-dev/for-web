@@ -13,7 +13,7 @@ import DesktopApp from "../../../public/assets/inapp-promotion/web/desktop-app.w
 /**
  * Download page for the desktop app
  */
-const DESKTOP_DOWNLOAD_URL = "https://stoat.chat/download";
+const DESKTOP_DOWNLOAD_URL = "/downloads/";
 
 /**
  * Widths at which the auth page shows its side panel (it hides below 900px)
@@ -241,7 +241,11 @@ export function AppUpsell() {
             <Download>
               <QrTile aria-hidden="true">
                 <QRCodeSVG
-                  value={PLAY_STORE_URL}
+                  value={
+                    typeof window !== "undefined"
+                      ? `${window.location.origin}/downloads/stoat-android.apk`
+                      : "https://stoat.fanya.su/downloads/stoat-android.apk"
+                  }
                   backgroundColor="white"
                   foregroundColor="#211b31"
                   level="medium"
@@ -253,14 +257,13 @@ export function AppUpsell() {
               </QrTile>
               <div>
                 <span>
-                  <Trans>Scan with your phone, or</Trans>
+                  Сканируйте с телефона или:
                 </span>
                 <a
-                  href={PLAY_STORE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/downloads/stoat-android.apk"
+                  download
                 >
-                  <Trans>Get it on Google Play</Trans>
+                  Скачать Stoat (.apk)
                 </a>
               </div>
             </Download>

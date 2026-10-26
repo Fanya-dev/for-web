@@ -185,7 +185,26 @@ interface PlatformInfo {
   ext: string;
   url?: string;
   isWeb?: boolean;
+  isIos?: boolean;
 }
+
+const IosNotice = styled("div", {
+  base: {
+    maxWidth: "580px",
+    margin: "0 0 24px",
+    padding: "12px 20px",
+    borderRadius: "12px",
+    background: "var(--md-sys-color-surface-container-high)",
+    border: "1px solid var(--md-sys-color-outline-variant, rgba(255,255,255,0.1))",
+    fontSize: "0.95rem",
+    lineHeight: 1.5,
+    color: "var(--md-sys-color-on-surface-variant)",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    textAlign: "left",
+  },
+});
 
 export function LandingPage(): JSX.Element {
   const navigate = useNavigate();
@@ -195,6 +214,7 @@ export function LandingPage(): JSX.Element {
     icon: string;
     url?: string;
     ext: string;
+    isIos?: boolean;
   }>({
     name: "Windows",
     icon: "desktop_windows",
@@ -215,10 +235,11 @@ export function LandingPage(): JSX.Element {
       });
     } else if (/iphone|ipad|ipod/.test(ua)) {
       setOs({
-        name: "iOS (PWA)",
+        name: "iOS (iPhone / iPad)",
         icon: "phone_iphone",
         url: undefined,
-        ext: "Веб / PWA",
+        ext: "Веб-версия",
+        isIos: true,
       });
     } else if (/win/.test(platform) || /windows/.test(ua)) {
       setOs({
@@ -255,7 +276,7 @@ export function LandingPage(): JSX.Element {
     {
       name: "Android",
       icon: "android",
-      desc: "Для смартфонов и планшетов",
+      desc: "Официальный установочный APK",
       ext: ".apk",
       url: "/downloads/stoat-android.apk",
     },
@@ -272,6 +293,13 @@ export function LandingPage(): JSX.Element {
       desc: "Apple Silicon и Intel Mac",
       ext: ".dmg / .zip",
       url: "/downloads/stoat-desktop-macos.zip",
+    },
+    {
+      name: "iOS (iPhone / iPad)",
+      icon: "phone_iphone",
+      desc: "Приложение не поддерживается, используйте Safari",
+      ext: "Веб-версия",
+      isIos: true,
     },
     {
       name: "Веб-версия",
@@ -300,12 +328,26 @@ export function LandingPage(): JSX.Element {
           Общайтесь свободно в голосовых комнатах и защищенных текстовых каналах.
         </Subtitle>
 
+        {os().isIos ? (
+          <IosNotice>
+            <Symbol size={28}>info</Symbol>
+            <div>
+              <strong>Приложение для iOS (iPhone / iPad) пока не поддерживается.</strong>
+              <div style={{ "margin-top": "2px", opacity: 0.85 }}>
+                Вы можете комфортно общаться прямо в браузере Safari или добавить Stoat на экран «Домой» (PWA).
+              </div>
+            </div>
+          </IosNotice>
+        ) : null}
+
         <ActionsRow>
           {os().url ? (
             <a href={os().url} download style={{ "text-decoration": "none" }}>
-              <Button size="lg" style={{ gap: "10px", padding: "0 28px" }}>
-                <Symbol size={22}>{os().icon}</Symbol>
-                Скачать для {os().name}
+              <Button size="lg" style={{ padding: "0 28px" }}>
+                <span style={{ display: "inline-flex", "align-items": "center", gap: "12px" }}>
+                  <Symbol size={22}>{os().icon}</Symbol>
+                  <span>Скачать для {os().name}</span>
+                </span>
               </Button>
             </a>
           ) : null}
@@ -314,10 +356,12 @@ export function LandingPage(): JSX.Element {
             size="lg"
             variant={os().url ? "tonal" : "filled"}
             onClick={() => navigate("/login")}
-            style={{ gap: "10px", padding: "0 28px" }}
+            style={{ padding: "0 28px" }}
           >
-            <Symbol size={22}>language</Symbol>
-            Открыть веб-версию
+            <span style={{ display: "inline-flex", "align-items": "center", gap: "12px" }}>
+              <Symbol size={22}>language</Symbol>
+              <span>Открыть веб-версию</span>
+            </span>
           </Button>
         </ActionsRow>
 
@@ -337,7 +381,16 @@ export function LandingPage(): JSX.Element {
             </CardIcon>
             <CardTitle>{p.name}</CardTitle>
             <CardDesc>{p.desc}</CardDesc>
-            {p.isWeb ? (
+            {p.isIos ? (
+              <Button
+                size="sm"
+                variant="outlined"
+                onClick={() => navigate("/login")}
+                style={{ width: "100%" }}
+              >
+                Открыть веб-версию
+              </Button>
+            ) : p.isWeb ? (
               <Button
                 size="sm"
                 variant="outlined"
