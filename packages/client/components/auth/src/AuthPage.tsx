@@ -34,9 +34,12 @@ import Bluesky from "./flows/bluesky.svg?component-solid";
 import GitHub from "./flows/github.svg?component-solid";
 
 const root = css({
+  display: "flex",
+  flexDirection: "column",
   width: "100%",
   height: "100%",
   minHeight: 0,
+  overflow: "hidden",
   color: "var(--md-sys-color-on-surface)",
   background: "var(--md-sys-color-surface)",
 });
@@ -48,8 +51,9 @@ const Page = styled("main", {
     gridTemplateColumns: "minmax(420px, 0.92fr) minmax(500px, 1.08fr)",
     gap: "clamp(18px, 3vw, 48px)",
     width: "100%",
+    flex: 1,
     height: "100%",
-    minHeight: "620px",
+    minHeight: 0,
     padding: "clamp(18px, 2.5vw, 36px)",
 
     "@media (max-width: 980px)": {
@@ -62,6 +66,7 @@ const Page = styled("main", {
       display: "block",
       height: "auto",
       minHeight: "calc(100% - 32px)",
+      overflowY: "auto",
       padding: 0,
     },
   },
@@ -501,7 +506,7 @@ export function AuthPage(props: { children: JSX.Element }) {
   );
 
   return (
-    <div use:scrollable={{ class: root }}>
+    <div class={root}>
       <Titlebar />
       <Page>
         <Hero>

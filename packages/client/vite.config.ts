@@ -19,7 +19,7 @@ const pwaScope = process.env.PWA_SCOPE || base;
 export default defineConfig({
   base,
   plugins: [
-    Inspect(),
+    ...(process.env.INSPECT ? [Inspect()] : []),
     devtools(),
     codegenPlugin(),
     babelMacrosPlugin(),
@@ -134,7 +134,7 @@ export default defineConfig({
         },
       },
     },
-    sourcemap: true,
+    sourcemap: false,
   },
   optimizeDeps: {
     exclude: ["hast"],

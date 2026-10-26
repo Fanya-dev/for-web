@@ -95,7 +95,7 @@ const Interface = (props: { children: JSX.Element }) => {
         <Switch fallback={<LoadingScreen />}>
           <Match when={!isLoggedIn()}>
             <Show
-              when={pathname === "/" || pathname === "" || pathname === "/landing"}
+              when={!window.native && !window.desktopConfig && (pathname === "/" || pathname === "" || pathname === "/landing")}
               fallback={<Navigate href="/login" />}
             >
               <LandingPage />

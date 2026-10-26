@@ -43,10 +43,10 @@ try {
     await rmdir(path);
   }
 
-  createSymlink();
+  await createSymlink();
 } catch (error) {
   if (error.code === "ENOENT") {
-    createSymlink();
+    await createSymlink();
   } else {
     console.error(error);
     process.exit(-1);
