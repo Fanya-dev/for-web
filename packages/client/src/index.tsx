@@ -115,6 +115,18 @@ function BotRedirect() {
   return <PWARedirect />;
 }
 
+/**
+ * Redirect /create/:code to /login/create/:code
+ */
+function CreateRedirect() {
+  const params = useParams();
+  return (
+    <Navigate
+      href={params.code ? `/login/create/${params.code}` : "/login/create"}
+    />
+  );
+}
+
 function MountContext(props: { children?: JSX.Element }) {
   const client = new QueryClient();
 
@@ -155,6 +167,8 @@ const routes = () => (
       <Route path="/reset/:token" component={FlowConfirmReset} />
       <Route path="/*" component={FlowLogin} />
     </Route>
+    <Route path="/create/:code" component={CreateRedirect} />
+    <Route path="/create" component={CreateRedirect} />
     <Route path="/" component={Interface as never}>
       <Route path="/pwa" component={PWARedirect} />
       <Route path="/dev" component={DevelopmentPage} />

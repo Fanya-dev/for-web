@@ -4,6 +4,7 @@ import {
   JSX,
   Match,
   onCleanup,
+  Show,
   Switch,
 } from "solid-js";
 
@@ -24,6 +25,7 @@ import { LoadingScreen } from "@revolt/ui";
 
 import { SlideDrawer } from "../components/ui/components/navigation/SlideDrawer";
 import { Sidebar } from "./interface/Sidebar";
+import { LandingPage } from "./LandingPage";
 
 /**
  * Application layout
@@ -92,7 +94,12 @@ const Interface = (props: { children: JSX.Element }) => {
         <Titlebar />
         <Switch fallback={<LoadingScreen />}>
           <Match when={!isLoggedIn()}>
-            <Navigate href="/login" />
+            <Show
+              when={pathname === "/" || pathname === "" || pathname === "/landing"}
+              fallback={<Navigate href="/login" />}
+            >
+              <LandingPage />
+            </Show>
           </Match>
           <Match when={lifecycle.loadedOnce()}>
             <Layout

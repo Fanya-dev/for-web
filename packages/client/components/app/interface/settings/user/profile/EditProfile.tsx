@@ -10,6 +10,7 @@ import { Avatar, CategoryButton, Column, Text, iconSize } from "@revolt/ui";
 import MdGroups from "@material-design-icons/svg/outlined/groups.svg?component-solid";
 
 import { UserSummary } from "../account/index";
+import { InviteFriendSection } from "../InviteFriend";
 
 import { UserProfileEditor } from "./UserProfileEditor";
 
@@ -27,6 +28,8 @@ export function EditProfile() {
         user={client().user!}
         bannerUrl={profile.data?.animatedBannerURL}
       />
+
+      <InviteFriendSection />
 
       <CategoryButton.Group>
         <CategoryButton.Collapse

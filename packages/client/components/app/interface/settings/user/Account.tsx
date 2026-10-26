@@ -21,6 +21,7 @@ import MdVerifiedUser from "@material-design-icons/svg/outlined/verified_user.sv
 
 import { useSettingsNavigation } from "../Settings";
 import { UserSummary } from "./account/index";
+import { InviteFriendSection } from "./InviteFriend";
 
 /**
  * Account Page
@@ -38,6 +39,7 @@ export function MyAccount(props: { onClose?: () => void }) {
         onEdit={() => navigate("profile")}
         showBadges
       />
+      <InviteFriendSection />
       <EditAccount onClose={props.onClose} />
       <MultiFactorAuth />
       <ManageAccount />
