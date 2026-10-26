@@ -5,7 +5,7 @@ import { css } from "styled-system/css";
 import { Button, iconSize } from "@revolt/ui";
 import { Symbol } from "@revolt/ui/components/utils/Symbol";
 
-import Wordmark from "../../public/assets/web/wordmark.svg?component-solid";
+import Wordmark from "../public/assets/web/wordmark.svg?component-solid";
 
 const Container = styled("div", {
   base: {
