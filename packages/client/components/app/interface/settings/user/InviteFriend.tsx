@@ -1,5 +1,4 @@
 import { For, Match, Show, Switch, createSignal, onMount } from "solid-js";
-import { Trans } from "@lingui/solid/macro";
 import { styled } from "styled-system/jsx";
 
 import { useClient } from "@revolt/client";
@@ -136,7 +135,7 @@ export function InviteFriendSection() {
     <CategoryButton.Group>
       <CategoryButton.Collapse
         icon={<MdAddUser {...iconSize(22)} />}
-        title={<Trans>Пригласить друга</Trans>}
+        title="Пригласить друга"
         description={
           invites().length > 0
             ? `Активных инвайтов: ${invites().length} из 5. Нажмите для управления`
@@ -153,9 +152,9 @@ export function InviteFriendSection() {
               disabled={loading()}
               onClick={handleCreateInvite}
             >
-              <Switch fallback={<Trans>Создать ссылку</Trans>}>
+              <Switch fallback={"Создать ссылку"}>
                 <Match when={loading()}>
-                  <Trans>Генерация...</Trans>
+                  Генерация...
                 </Match>
               </Switch>
             </Button>
