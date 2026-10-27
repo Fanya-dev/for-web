@@ -91,8 +91,7 @@ export function LoadingScreen(props: { isStoat?: boolean }) {
 
     // Check the status API for an ongoing incident.
     const statusTimer = setTimeout(async () => {
-      //TODO Fetch status from current instance backend instead of only stoat.chat
-      if (!props.isStoat && !instance?.isStoat) return;
+      return; // Self-hosted, do not query external stoat.chat status
       try {
         const res = await fetch(STATUS_API_URL, { signal: controller.signal });
         const data = (await res.json()) as StatusResponse;

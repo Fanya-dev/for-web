@@ -1,5 +1,19 @@
-export const STOAT_HOST = "stoat.chat";
-const STOAT_API = "https://api.stoat.chat";
+const getWindowOrigin = () => {
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin;
+  }
+  return "https://stoat.fanya.su";
+};
+
+const getWindowHost = () => {
+  if (typeof window !== "undefined" && window.location?.host) {
+    return window.location.host;
+  }
+  return "stoat.fanya.su";
+};
+
+export const STOAT_HOST = getWindowHost();
+const STOAT_API = `${getWindowOrigin()}/api`;
 
 /** App `stoat.json` endpoint format */
 export interface AppConfig {
@@ -15,35 +29,32 @@ const getEnv = (name: string, devOnly?: boolean) =>
     ? (import.meta.env[name] as string)
     : undefined;
 
-/** If host is Stoat, normalize to STOAT_HOST, else return host */
-export const normalizeHost = (host: string) =>
-  [
-    // historically...
-    "api.revolt.chat",
-    "beta.revolt.chat",
-    "revolt.chat",
-    // ... and now:
-    "api.stoat.chat",
-    "beta.stoat.chat",
-  ].includes(host)
-    ? STOAT_HOST
-    : host;
+/** If host is Stoat, normalize to current host, else return host */
+export const normalizeHost = (host?: string) => {
+  if (!host) return getWindowHost();
+  if (
+    [
+      "api.revolt.chat",
+      "beta.revolt.chat",
+      "revolt.chat",
+      "api.stoat.chat",
+      "beta.stoat.chat",
+      "stoat.chat",
+    ].includes(host)
+  ) {
+    return getWindowHost();
+  }
+  return host;
+};
 
-const isStoatOfficialAPI = (api: string) =>
-  [
-    "https://api.revolt.chat",
-    "https://api.stoat.chat",
-    "https://stoat.chat/api",
-    "https://beta.stoat.chat/api",
-    "canary-api.stoat.chat",
-  ].includes(api);
+const isStoatOfficialAPI = (_api: string) => true;
 
 const DEFAULT_HOST = normalizeHost(
-  getEnv("VITE_DEV_HOST", true) || getEnv("VITE_HOST") || STOAT_HOST,
+  getEnv("VITE_DEV_HOST", true) || getEnv("VITE_HOST") || getWindowHost(),
 );
 
 const DEFAULT_API_URL =
-  getEnv("VITE_DEV_API_URL", true) || getEnv("VITE_API_URL") || STOAT_API;
+  getEnv("VITE_DEV_API_URL", true) || getEnv("VITE_API_URL") || `${getWindowOrigin()}/api`;
 
 if (!isStoatOfficialAPI(DEFAULT_API_URL) && DEFAULT_HOST === STOAT_HOST)
   console.error("VITE_HOST required when VITE_API_URL is set!");

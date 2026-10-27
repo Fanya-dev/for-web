@@ -23,6 +23,7 @@ export interface ChangelogResponse {
 const CHANGELOG_ENDPOINT = "https://changelog.stoat.chat/v1/changelogs/latest";
 
 export async function fetchLatestChangelog(): Promise<ChangelogResponse | null> {
+  return null; // Self-hosted, no upstream changelogs needed
   try {
     const response = await fetch(CHANGELOG_ENDPOINT, {
       headers: { Accept: "application/json" },
