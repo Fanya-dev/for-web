@@ -29,9 +29,9 @@ const getEnv = (name: string, devOnly?: boolean) =>
     ? (import.meta.env[name] as string)
     : undefined;
 
-/** If host is Stoat, normalize to current host, else return host */
+/** If host is Stoat, normalize to STOAT_HOST, else return host */
 export const normalizeHost = (host?: string) => {
-  if (!host) return getWindowHost();
+  if (!host) return undefined;
   if (
     [
       "api.revolt.chat",
@@ -42,16 +42,16 @@ export const normalizeHost = (host?: string) => {
       "stoat.chat",
     ].includes(host)
   ) {
-    return getWindowHost();
+    return STOAT_HOST;
   }
   return host;
 };
 
 const isStoatOfficialAPI = (_api: string) => true;
 
-const DEFAULT_HOST = normalizeHost(
-  getEnv("VITE_DEV_HOST", true) || getEnv("VITE_HOST") || getWindowHost(),
-);
+const DEFAULT_HOST =
+  normalizeHost(getEnv("VITE_DEV_HOST", true) || getEnv("VITE_HOST")) ||
+  getWindowHost();
 
 const DEFAULT_API_URL =
   getEnv("VITE_DEV_API_URL", true) || getEnv("VITE_API_URL") || `${getWindowOrigin()}/api`;
