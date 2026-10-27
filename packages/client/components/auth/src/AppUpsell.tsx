@@ -13,7 +13,7 @@ import DesktopApp from "../../../public/assets/inapp-promotion/web/desktop-app.w
 /**
  * Download page for the desktop app
  */
-const DESKTOP_DOWNLOAD_URL = "/downloads/";
+const DESKTOP_DOWNLOAD_URL = "/downloads/stoat-desktop-setup.exe";
 
 /**
  * Widths at which the auth page shows its side panel (it hides below 900px)
@@ -199,7 +199,7 @@ export function AppUpsell() {
     createSignal(false);
 
   const [upsell, setUpsell] = createSignal<Upsell>(
-    !isStoat ? "none" : window.native ? "android" : "desktop",
+    window.native ? "android" : "desktop",
   );
 
   // decided outside JSX, as Solid wraps JSX conditions in a way that stops

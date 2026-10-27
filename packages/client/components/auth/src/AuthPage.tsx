@@ -21,6 +21,7 @@ import {
 } from "@revolt/app/menus/ContextMenu";
 import { useClientLifecycle } from "@revolt/client";
 import { State } from "@revolt/client/Controller";
+import { Language } from "@revolt/i18n";
 import { useModals } from "@revolt/modal";
 import { A, useLocation } from "@revolt/routing";
 import { useState } from "@revolt/state";
@@ -48,18 +49,18 @@ const Page = styled("main", {
   base: {
     boxSizing: "border-box",
     display: "grid",
-    gridTemplateColumns: "minmax(420px, 0.92fr) minmax(500px, 1.08fr)",
-    gap: "clamp(18px, 3vw, 48px)",
+    gridTemplateColumns: "minmax(400px, 0.92fr) minmax(460px, 1.08fr)",
+    gap: "clamp(14px, 2.5vw, 36px)",
     width: "100%",
     flex: 1,
     height: "100%",
     minHeight: 0,
-    padding: "clamp(18px, 2.5vw, 36px)",
+    padding: "clamp(10px, 1.8vw, 20px)",
 
     "@media (max-width: 980px)": {
-      gridTemplateColumns: "minmax(320px, 0.78fr) minmax(440px, 1.22fr)",
-      gap: "18px",
-      padding: "18px",
+      gridTemplateColumns: "minmax(300px, 0.78fr) minmax(400px, 1.22fr)",
+      gap: "14px",
+      padding: "14px",
     },
 
     "@media (max-width: 900px)": {
@@ -218,10 +219,10 @@ const flowWrap = css({
   justifyContent: "center",
   minHeight: 0,
   overflowY: "auto",
-  padding: "32px 0",
+  padding: "clamp(6px, 1.5vh, 16px) 0",
 
   "@media (max-width: 900px)": {
-    padding: "42px 0",
+    padding: "24px 0",
   },
 });
 
@@ -561,6 +562,28 @@ export function AuthPage(props: { children: JSX.Element }) {
                   <Trans>Log in</Trans>
                 </A>
               </Show>
+
+              <IconButton
+                variant="tonal"
+                aria-label="Toggle language"
+                onPress={() => {
+                  const current = state.locale.get().lang;
+                  state.locale.switch(
+                    current === Language.RUSSIAN ? Language.ENGLISH : Language.RUSSIAN,
+                  );
+                }}
+              >
+                <span
+                  style={{
+                    "font-size": "11px",
+                    "font-weight": "700",
+                    "letter-spacing": "0.5px",
+                    "text-transform": "uppercase",
+                  }}
+                >
+                  {state.locale.get().lang === Language.RUSSIAN ? "RU" : "EN"}
+                </span>
+              </IconButton>
 
               <IconButton
                 variant="tonal"
