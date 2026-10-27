@@ -12,7 +12,7 @@ const getWindowHost = () => {
   return "stoat.fanya.su";
 };
 
-export const STOAT_HOST = getWindowHost();
+export const STOAT_HOST = "stoat.chat";
 const STOAT_API = `${getWindowOrigin()}/api`;
 
 /** App `stoat.json` endpoint format */

@@ -131,11 +131,13 @@ const Config: SettingsConfiguration<{ server: Server }> = {
             <span class={css({ userSelect: "none", fontWeight: "bold" })}>
               <Trans>Version:</Trans>
             </span>{" "}
-            <span class={css({ userSelect: "all" })}>{pkg.version}</span>
+            <span class={css({ userSelect: "all" })}>
+              {pkg.version}{(pkg as Record<string, unknown>).localVersion ? ` (${(pkg as Record<string, unknown>).localVersion})` : ""}
+            </span>
           </Text>
           <Show when={window.native}>
             <Text class="label">
-              Stoat for Desktop {window.native.versions.desktop()}
+              Stoat for Desktop {window.native.versions.desktop().includes("(") ? window.native.versions.desktop() : `${window.native.versions.desktop()}${(pkg as Record<string, unknown>).localVersion ? ` (${(pkg as Record<string, unknown>).localVersion})` : ""}`}
             </Text>
             <Text class="label">
               <span

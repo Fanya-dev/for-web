@@ -5,6 +5,8 @@ import { Trans, useLingui } from "@lingui/solid/macro";
 import { CategoryButton, Checkbox, Column } from "@revolt/ui";
 import { Symbol } from "@revolt/ui/components/utils/Symbol";
 
+import pkg from "../../../../../../../package.json";
+
 declare type DesktopConfig = {
   firstLaunch: boolean;
   customFrame: boolean;
@@ -166,7 +168,10 @@ export default function Native() {
           icon={<Symbol>desktop_windows</Symbol>}
           description={
             <>
-              <Trans>Version:</Trans> {window.native.versions.desktop()}
+              <Trans>Version:</Trans>{" "}
+              {window.native.versions.desktop().includes("(")
+                ? window.native.versions.desktop()
+                : `${window.native.versions.desktop()}${(pkg as Record<string, unknown>).localVersion ? ` (${(pkg as Record<string, unknown>).localVersion})` : ""}`}
             </>
           }
         >
